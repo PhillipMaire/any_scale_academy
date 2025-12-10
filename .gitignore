@@ -23,3 +23,5 @@ ray-rllib/recsys/tmp/
 .vscode/
 .venv/
 .env
+
+INTRO_RAY/data/
