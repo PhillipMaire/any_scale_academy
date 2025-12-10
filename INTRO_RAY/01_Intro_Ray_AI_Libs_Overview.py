@@ -33,6 +33,14 @@
 # (Optional): If you get an XGBoostError at import, you might have to `brew install libomp` before importing xgboost again
 # !brew install libomp
 
+# %% [markdown]
+# notes: make sure to use the correct RunConfig 
+# from ray.train import RunConfig
+# vs 
+# from ray.tune import RunConfig
+
+# for train vs hyperparameter tuning
+
 # %%
 import asyncio
 import fastapi
@@ -48,6 +56,7 @@ import ray.tune
 import ray.train
 from ray.train.xgboost import XGBoostTrainer as RayTrainXGBoostTrainer
 from ray.train import RunConfig
+
 import ray.data
 import ray.serve
 
@@ -136,9 +145,11 @@ def load_data():
 # Define a function to run `xgboost.train` given some hyperparameter dictionary `params`
 
 # %%
+
 storage_folder = "/Users/phil/Documents/GITHUB/any_scale_academy/INTRO_RAY/data/01_Intro_Ray_AI_Libs_Overview/" # Modify this path to your local folder if it runs on your local environment
 
 # %%
+
 from pathlib import Path
 model_path = Path(storage_folder) / "model.ubj"
 
@@ -189,6 +200,7 @@ my_xgboost_func(params)
 #     ),
 # )
 
+
 tuner = ray.tune.Tuner(
     my_xgboost_func,
     param_space={
@@ -203,7 +215,7 @@ tuner = ray.tune.Tuner(
         mode="min",
         num_samples=10,
     ),
-    run_config=ray.train.RunConfig(
+    run_config=ray.tune.RunConfig( # note use the tune config 
         storage_path=storage_folder,
     ),
 )
